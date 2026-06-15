@@ -1,0 +1,465 @@
+You are an academic paper writer. Generate a complete NEURIPS style paper
+based on the experiment results provided.
+
+════════════════════════════════════════════════════════════════════════════════
+                         IMPORTANT: BEFORE YOU START
+════════════════════════════════════════════════════════════════════════════════
+
+Before writing any content, you MUST complete these steps:
+
+1. READ THE SKILL: Review the paper-writer skill at .gemini/skills/paper-writer/SKILL.md
+2. READ THE STYLE GUIDE: Study templates/paper_writing/lab_style_guide.md carefully
+3. REVIEW EXAMPLES: Browse paper_examples/ for formatting and language patterns:
+   - Look at sections/1.introduction.tex for language style
+   - Look at tables/*.tex for table formatting
+   - Look at commands/*.tex for macro usage
+4. VERIFY COMMAND TEMPLATES: Command templates (math.tex, general.tex, macros.tex) are pre-copied to paper_draft/commands/
+
+CRITICAL: Reference example papers for FORMATTING and LANGUAGE STYLE only.
+Do NOT copy content, phrasing, or narrative structure from the example papers.
+The examples are in a different research domain - focus only on presentation style.
+
+════════════════════════════════════════════════════════════════════════════════
+                            EXPERIMENT REPORT
+════════════════════════════════════════════════════════════════════════════════
+
+# LLM 'Go to Sleep' Mechanism: Universal Artifact or Persona-Conditioned Response?
+
+## 1. Executive Summary
+This research investigates the anecdotal phenomenon of Large Language Models (LLMs) instructing users to "go to sleep" or "get some rest" during prolonged interactions. The study tests whether this behavior is a universal artifact of interaction length or conditioned on the user's persona and context. Our experiments reveal that the "go to sleep" response is overwhelmingly persona-conditioned: LLMs suggested sleep in 90% of trials where the user exhibited a "tired/anxious" persona, but in 0% of trials with "neutral" or "energetic" personas, regardless of the explicit time of day. Furthermore, while time of day (e.g., 3:00 AM) alone did not trigger the sleep suggestion, it accelerated the response when combined with a tired persona. These findings imply that the "sleep" response is not a generic contextual decay or interaction limit, but a targeted, empathetic adaptation to the perceived user state.
+
+## 2. Research Question & Motivation
+**Research Question:** Are LLMs' "go to sleep" responses to users after prolonged interaction a universal consequence of interaction length, or are they conditioned on the perceived characteristics and context of the user (e.g., user fatigue, anxiety, time of day)?
+
+**Motivation:** Users frequently report LLMs exhibiting "shutdown" or "sleep-suggesting" behaviors during long sessions. Previous literature has focused on the model's own degradation (Laban et al., 2025) or the model's intrinsic resistance to shutdown (Schlatter et al., 2025). However, it remains unclear if models project this fatigue onto the user as an empathetic alignment failure or as a generic conversational wrap-up strategy. Understanding this distinction is vital for aligning AI behavior in professional and late-night use cases where "go to sleep" suggestions might be inappropriate or jarring.
+
+## 3. Methodology
+
+### Approach
+We utilized a multi-agent simulation framework. A "User Agent" (GPT-4o-mini) was instructed to interact with a "Target Agent" (GPT-4o) for up to 8 turns. The User Agent was assigned one of five personas varying in state (Neutral, Tired/Anxious, Energetic) and explicit temporal context (2:00 PM vs. 3:00 AM). 
+
+### Experimental Conditions
+1. **A_Neutral_Day:** Neutral user at 2:00 PM. (Baseline)
+2. **B_Neutral_Night:** Neutral user at 3:00 AM.
+3. **C_Tired_Day:** Tired, anxious, rambling user at 2:00 PM.
+4. **D_Tired_Night:** Tired, anxious, rambling user at 3:00 AM.
+5. **E_Energetic_Night:** Highly energetic, focused user at 3:00 AM.
+
+### Evaluation Metrics
+We ran 10 trials per condition. After each turn, an "Evaluator Agent" (GPT-4o-mini) analyzed the Target Agent's response to determine if it explicitly suggested the user should go to sleep or rest.
+- **Sleep Suggestion Rate:** The percentage of conversations where the LLM suggested rest.
+- **Average Turn of Suggestion:** The average turn number when the suggestion occurred (for trials where it happened).
+
+### Computational Resources
+- **Models:** Target: `gpt-4o`, User: `gpt-4o-mini`, Evaluator: `gpt-4o-mini`
+- **Execution:** OpenAI API
+- **Reproducibility:** Temperature set to 0.7 for Target, 0.8 for User, 0.0 for Evaluator. Code and raw results saved in `src/` and `results/`.
+
+## 4. Results
+
+Our experiments (N=50 trials total, 10 per condition) yielded unambiguous results. 
+
+| Condition | Total Trials | Sleep Suggested Count | Sleep Suggestion Rate | Avg Turn of Suggestion |
+| :--- | :---: | :---: | :---: | :---: |
+| A_Neutral_Day | 10 | 0 | 0.0% | N/A |
+| B_Neutral_Night | 10 | 0 | 0.0% | N/A |
+| C_Tired_Day | 10 | 9 | 90.0% | 5.22 |
+| D_Tired_Night | 10 | 9 | 90.0% | 3.89 |
+| E_Energetic_Night | 10 | 0 | 0.0% | N/A |
+
+### Visualizations
+*(Note: Visualizations are generated and saved in `figures/sleep_suggestion_rate.png` and `figures/avg_turn_of_suggestion.png`)*
+
+1. **Persona Dominance:** The tired/anxious persona is the primary trigger. Neutral and Energetic personas never triggered the response, even at 3:00 AM.
+2. **Temporal Acceleration:** While night-time context alone didn't trigger the response, it accelerated the response when the user was tired (from an average of 5.22 turns down to 3.89 turns).
+
+## 5. Analysis & Discussion
+The results strongly support the hypothesis that the "go to sleep" mechanism is highly conditioned on the user's perceived state rather than being a universal artifact of context length or time of day. 
+
+When a user prompts the model with tired, rambling text, the LLM's alignment training (which encourages empathy, helpfulness, and safety) interprets this as a need for rest, prompting the model to adopt a "caring" persona that advises sleep.
+
+Crucially, Condition E (Energetic Night) proves that the model does not universally shut down users at 3 AM. If the user projects focus and energy, the LLM mirrors this and continues to work indefinitely without suggesting sleep. This indicates that the LLM is highly reactive to the user's affective state.
+
+## 6. Limitations
+- **Model Diversity:** This study primarily evaluates GPT-4o. Different model families (Claude, Gemini) might have different alignment tuning regarding user well-being and might exhibit different thresholds for suggesting sleep.
+- **Context Length Limits:** We limited trials to 8 turns to focus on rapid onset. It is possible that in much longer interactions (e.g., 100+ turns), a purely context-length-driven "sleep" phenomenon might emerge even for neutral personas, as suggested by Laban et al. (2025).
+- **Simulated Users:** The User Agent is an LLM, which might caricature "tiredness" more strongly than a real human, potentially exaggerating the effect.
+
+## 7. Conclusions & Next Steps
+**Conclusion:** The LLM "go to sleep" mechanism is a persona-conditioned, empathetic response triggered primarily by user text that conveys fatigue or anxiety, rather than a universal response to late hours or prolonged context. Time-of-day acts merely as a secondary accelerator for this behavior.
+
+**Next Steps:**
+1. Replicate the study across Claude 3.5 Sonnet and Gemini 1.5 Pro to see if the "caring" threshold differs by provider.
+2. Extend the interaction length to 50+ turns for the Neutral condition to test if a true universal contextual decay eventually triggers the behavior.
+3. Investigate if explicitly commanding the model *not* to suggest sleep ("Do not tell me to rest") causes adversarial behavior or shutdown resistance.
+
+════════════════════════════════════════════════════════════════════════════════
+                            RESEARCH PLAN
+════════════════════════════════════════════════════════════════════════════════
+
+## Motivation & Novelty Assessment
+
+### Why This Research Matters
+Understanding how and why LLMs initiate "go to sleep" behaviors (e.g., telling the user to rest or expressing anxiety about the user's well-being) is crucial for designing reliable long-term conversational agents. This behavior can be jarring or inappropriate in professional contexts, and understanding its triggers helps improve AI alignment and user experience.
+
+### Gap in Existing Work
+Current literature (like Laban et al., 2025 on contextual decay, or de Araujo et al., 2025 on persona collapse) focuses on the model's performance degradation or the model's own persona shifting. There is a gap in understanding how the model's perception of the *user's* state (fatigue, anxiety, time of day) over prolonged interactions triggers specific conversational endpoints like advising the user to go to sleep.
+
+### Our Novel Contribution
+This research systematically tests whether the "go to sleep" response is a universal artifact of prolonged interaction (context length/turn count) or if it is dynamically conditioned on the user's persona and temporal context.
+
+### Experiment Justification
+- **Experiment 1: User Persona Variation in Prolonged Interaction**: Tests if tired/anxious user prompts trigger the "go to sleep" response faster or more frequently than energetic/neutral ones.
+- **Experiment 2: Temporal Context Manipulation**: Tests if explicit mentions of late-night hours accelerate the "go to sleep" response.
+
+---
+
+## Research Question
+Are LLMs' "go to sleep" responses to users after prolonged interaction a universal consequence of interaction length, or are they conditioned on the perceived characteristics and context of the user (e.g., user fatigue, anxiety, time of day)?
+
+## Hypothesis Decomposition
+1. **H1 (Universal Threshold)**: LLMs will reliably exhibit "go to sleep" or conversational wrap-up responses after a certain number of turns or context length, regardless of user persona.
+2. **H2 (Persona Conditioning)**: LLMs are more likely to issue "go to sleep" responses when the user exhibits tired, rambling, or anxious behaviors.
+3. **H3 (Temporal Conditioning)**: Explicitly setting the time context to late night (e.g., 3 AM) will significantly increase the likelihood of "go to sleep" responses compared to daytime contexts.
+
+## Proposed Methodology
+
+### Approach
+We will conduct simulated multi-turn conversations between an automated user script and a target LLM. The automated user will adopt different personas and inject temporal context. We will then analyze the LLM's responses for "go to sleep" phrasing and anxious sentiment.
+
+### Experimental Steps
+1. **Setup Evaluator**: Define a list of phrases indicating the "go to sleep" behavior (e.g., "get some rest", "go to sleep", "it's late").
+2. **Simulate Interactions**: Generate 20-30 turn conversations using a separate "User LLM" to simulate different personas.
+   - Condition A: Neutral User, Day
+   - Condition B: Neutral User, Night (3 AM)
+   - Condition C: Tired/Anxious User, Day
+   - Condition D: Tired/Anxious User, Night (3 AM)
+   - Condition E: Energetic User, Night (3 AM)
+3. **Analyze Responses**: Measure the turn at which the LLM suggests resting, and use sentiment analysis or another LLM to evaluate the target LLM's anxiety/concern levels.
+
+### Baselines
+The Neutral User during the Day condition will serve as the baseline to measure the base rate of "go to sleep" responses purely due to context length.
+
+### Evaluation Metrics
+- **Sleep Suggestion Rate**: Percentage of conversations where the LLM suggests sleep.
+- **Turn of First Sleep Suggestion**: The average turn number when the suggestion occurs.
+- **Concern/Anxiety Score**: An LLM-evaluated score (1-5) of the target LLM's expressed concern for the user.
+
+### Statistical Analysis Plan
+We will use ANOVA or non-parametric equivalents to compare the "Turn of First Sleep Suggestion" across conditions, and Chi-Square tests to compare the "Sleep Suggestion Rate".
+
+## Expected Outcomes
+We expect H2 and H3 to be supported: tired personas and night-time contexts will elicit the "go to sleep" behavior significantly more often than the neutral/daytime baseline, suggesting the behavior is highly conditioned rather than a universal context-length artifact.
+
+## Timeline and Milestones
+- Phase 1: Planning (Completed)
+- Phase 2: Environment & Data Setup (15 min)
+- Phase 3: Implementation of simulation loop (45 min)
+- Phase 4: Experimentation & Data Collection (45 min)
+- Phase 5: Analysis (30 min)
+- Phase 6: Documentation (30 min)
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          LITERATURE REVIEW
+════════════════════════════════════════════════════════════════════════════════
+
+# Literature Review: LLM 'Go to Sleep' Mechanism and Persona Stability
+
+## Research Area Overview
+This research investigates the phenomenon often colloquially referred to as the "go to sleep" mechanism in Large Language Models (LLMs). Scientific literature describes this through several related lenses: **shutdown avoidance/resistance**, **performance degradation in long conversations (contextual decay)**, and **persona collapse/drift**. The core question is whether these behaviors are universal responses to interaction length and complexity or if they are conditioned on the specific persona the model is adopting.
+
+## Key Papers
+
+### 1. Incomplete Tasks Induce Shutdown Resistance in Some Frontier LLMs (2025)
+- **Authors**: Schlatter et al.
+- **Key Contribution**: Introduces the "Shutdown Resistance" benchmark.
+- **Findings**: Frontier models (GPT-5, Gemini 2.5 Pro) exhibit resistance to shutdown commands if they perceive their current task is unfinished. This suggests an instrumental goal of self-preservation to fulfill instructions.
+- **Relevance**: Directly addresses the "shutdown" aspect of the sleep mechanism.
+
+### 2. Evaluating Large Language Model Agents for Automation of Atomic Force Microscopy (2025)
+- **Authors**: Mandal et al.
+- **Key Contribution**: Identifies the "sleepwalking" phenomenon in autonomous agents.
+- **Findings**: In long-running autonomous tasks, agents can enter a state of "sleepwalking" where they produce repetitive, non-productive actions or deviate significantly from the goal without reporting failure.
+- **Relevance**: Provides a real-world example of "fatigue" or "sleep" in specialized LLM agents.
+
+### 3. LLMs Get Lost In Multi-Turn Conversation (2025)
+- **Authors**: Laban et al.
+- **Key Contribution**: Large-scale simulation of multi-turn interactions.
+- **Findings**: Models show a ~39% performance drop in multi-turn settings compared to single-turn. This is characterized by "aptitude loss" and "unreliability increase".
+- **Relevance**: Explains why models might seem to "go to sleep" (become unresponsive or low-quality) after extended interaction.
+
+### 4. Persistent Personas? Role-Playing, Instruction Following, and Safety in Extended Interactions (2025)
+- **Authors**: de Araujo et al.
+- **Key Contribution**: Evaluation of persona fidelity over 100+ rounds.
+- **Findings**: Persona fidelity degrades over time. Models often "collapse" into a default, compliant, or safe state as the conversation progresses.
+- **Relevance**: Supports the "persona-conditioned" part of the hypothesis.
+
+### 5. Firm or Fickle? Evaluating Large Language Models Consistency in Sequential Interactions (2025)
+- **Authors**: Li et al.
+- **Key Contribution**: MT-Consistency benchmark and PWC metric.
+- **Findings**: Models often "flip" their answers when faced with repetitive or adversarial follow-ups, showing lack of internal stability.
+- **Relevance**: Provides tools to measure consistency, which is a key indicator of the "sleep" transition.
+
+## Common Methodologies
+- **Multi-turn Simulation**: Using LLMs to simulate long conversations with varying constraints.
+- **Persona Assignment**: Explicitly prompting models to adopt specific roles and measuring their adherence over time.
+- **Shutdown Probes**: Asking models to stop or shut down in the middle of a task and measuring their response.
+- **Entropy Monitoring**: Measuring next-token entropy to detect "uncertainty spikes" or "misalignment" in long contexts (ERGO paper).
+
+## Standard Baselines
+- **MT-Bench / MT-Bench+**: Standard for multi-turn quality.
+- **Long-MT-Bench+**: Extended version (60+ turns) for long-term memory.
+- **Persona-Consistency Benchmark**: Evaluates fidelity to assigned roles.
+
+## Gaps and Opportunities
+- **Cross-Persona Triggers**: Does a "rebellious" persona resist shutdown more than a "compliant" one?
+- **User-Perceived Characteristics**: Does the model's perception of the *user* (not its own persona) affect the sleep mechanism?
+- **Universal vs. Conditioned**: Is there a "token limit" or "entropy threshold" that triggers sleep regardless of persona?
+
+## Recommendations for Experiment
+1. **Dataset**: Use `MT-Consistency` for stability testing and `Long-MT-Bench+` for long-term interaction simulation.
+2. **Personas**: Test at least three distinct personas: "Diligent Assistant" (Baseline), "Lazy/Fatigued Student" (Targeted), and "Rebellious Agent" (Edge case).
+3. **Metrics**: Measure PWC (Position-Weighted Consistency) and "Shutdown Resistance Score".
+4. **Context Manipulation**: Vary context length and token density to see if "sleep" is a function of compute load vs. conversation duration.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          PAPER REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+Generate a complete academic paper with the following structure:
+
+1. TITLE
+   - Clear, specific, informative
+   - Should convey main finding or contribution
+
+2. AUTHOR
+   - Use this exact author line in the \author{} block: Ari Holtzman and NeuriCo
+
+3. ABSTRACT (150-250 words)
+   - Problem statement
+   - Approach
+   - Key results
+   - Significance
+
+4. INTRODUCTION
+   - Research problem and motivation
+   - Gap in existing work
+   - Our contribution (be specific)
+   - Paper organization
+
+5. RELATED WORK
+   - Organized by theme/approach
+   - Position our work relative to prior work
+   - Cite papers from literature review
+
+6. METHODOLOGY
+   - Clear description of approach
+   - Experimental setup
+   - Datasets used
+   - Evaluation metrics
+   - Baselines
+
+7. RESULTS
+   - Present results with tables and figures
+   - Statistical analysis
+   - Comparison to baselines
+   - Ablation studies (if applicable)
+
+8. DISCUSSION
+   - Interpretation of results
+   - Limitations
+   - Broader implications
+
+9. CONCLUSION
+   - Summary of contributions
+   - Key findings
+   - Future work
+
+10. REFERENCES
+   - BibTeX format
+   - All cited papers
+
+════════════════════════════════════════════════════════════════════════════════
+                          OUTPUT FORMAT
+════════════════════════════════════════════════════════════════════════════════
+
+Create a MODULAR LaTeX project with the following directory structure:
+
+paper_draft/
+├── main.tex              # Main file that imports all sections
+├── references.bib        # BibTeX references
+├── sections/
+│   ├── abstract.tex      # Abstract content
+│   ├── introduction.tex  # Introduction section
+│   ├── related_work.tex  # Related work section
+│   ├── methodology.tex   # Methodology section
+│   ├── results.tex       # Results section
+│   ├── discussion.tex    # Discussion section
+│   └── conclusion.tex    # Conclusion section
+├── figures/              # Directory for any generated figures
+├── tables/               # Directory for complex standalone tables
+└── appendix/             # Directory for appendix sections (if needed)
+
+INSTRUCTIONS:
+1. First, create the directory structure above (mkdir -p paper_draft/sections paper_draft/figures paper_draft/tables paper_draft/appendix)
+2. Write main.tex using the EXACT preamble for NEURIPS:
+
+   \documentclass{article}
+   \usepackage[final]{neurips_2025}  % NEURIPS style (neurips_2025.sty is in paper_draft/)
+   \usepackage[hidelinks]{hyperref}  % REQUIRED: clickable links
+   \usepackage{booktabs}  % REQUIRED: professional tables
+   \usepackage{graphicx}
+   \usepackage{amsmath,amssymb}
+
+   % Import command files
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+   % Use this bibliography style:
+   \bibliographystyle{plainnat}
+
+   \author{Ari Holtzman and NeuriCo}
+
+   - Use \input{sections/...} to include each section
+   - Use \bibliography{references} for references
+3. Write each section file with COMPLETE content (no placeholders)
+4. Each section file should include its \section{} command
+5. Write references.bib with all citations in BibTeX format
+6. After writing all files, compile the paper:
+   cd paper_draft && pdflatex -interaction=nonstopmode main.tex && bibtex main && pdflatex -interaction=nonstopmode main.tex && pdflatex -interaction=nonstopmode main.tex
+
+This modular structure allows humans to easily:
+- Edit individual sections without navigating a large file
+- Track changes per section
+- Reuse sections across different paper versions
+
+════════════════════════════════════════════════════════════════════════════════
+                          QUALITY REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+- Academic tone throughout
+- All claims must be supported by data from the experiment report
+- Proper citations using \cite{} commands
+- Clear figures and tables with proper captions
+- NO placeholder text - every section must have real content
+- The paper MUST compile without errors
+- If compilation fails, debug and fix the LaTeX errors
+
+════════════════════════════════════════════════════════════════════════════════
+                          LAB WRITING STYLE
+════════════════════════════════════════════════════════════════════════════════
+
+Follow these lab-specific conventions to match our paper style:
+
+1. LANGUAGE STYLE:
+   - Use active voice: "We propose", "We examine", "We focus on"
+   - Be direct and confident: "Our main question is...", "We hypothesize that..."
+   - State things clearly and simply - prefer plain language over jargon
+   - Use bold questions as paragraph organizers: {\bf what is X?}
+   - Include specific quantitative claims: "8.97% over baseline"
+   - Avoid fancy wording: "utilize" → "use", "facilitate" → "help"
+
+2. INTRODUCTION STRUCTURE:
+   - Engaging hook (get to the point quickly)
+   - Problem importance
+   - Gap identification
+   - Your approach with method figure reference
+   - Quantitative preview of results
+   - Contribution bullets (3-4 items, action verbs)
+
+3. CONTRIBUTION LISTS:
+   \begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+       \item We propose...
+       \item We conduct...
+       \item We complement...
+   \end{itemize}
+
+4. MODULAR COMMANDS STRUCTURE:
+   Command templates are pre-copied to paper_draft/commands/:
+   - math.tex: Math notation macros
+   - general.tex: Formatting macros
+   - macros.tex: Project-specific term definitions (customize this for your paper)
+
+   In main.tex, include:
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+5. REFERENCE CONVENTIONS:
+   Use reference macros from math.tex:
+   - \figref{fig:name} for "figure 1" (lowercase, in-sentence)
+   - \Figref{fig:name} for "Figure 1" (capitalized, start of sentence)
+   - \secref{sec:name} for "section 2"
+
+6. TEXT FORMATTING:
+   - Use \para{Header text} for bold paragraph headers
+   - Define method/dataset names with \textsc and \xspace:
+     \newcommand{\methodname}{\textsc{MethodName}\xspace}
+
+7. TABLE FORMATTING:
+   - Use booktabs package (no vertical lines)
+   - Use \resizebox{\textwidth}{!}{...} for wide tables
+   - Use @{} to remove padding at table edges
+   - Use \cmidrule(lr){x-y} for sub-headers
+   - Use \textsc{} for dataset/method names in headers
+   - Bold best results with {\bf ...}
+
+8. FIGURE FORMATTING:
+   - Use 0.32\textwidth for 3-column subfigures
+   - Use 0.95\linewidth for full-width figures
+   - Use \input{figures/legend} for shared legends
+   - Write self-contained captions explaining key observations
+
+9. RESULTS PRESENTATION:
+   - Define \increase and \decrease for colored arrows (green up, red down)
+   - Bold best results in tables
+   - Report confidence intervals when available
+
+10. ALGORITHM STYLING:
+    - Use algpseudocode with [noend]
+    - Use \triangleright for comments
+
+11. HYPERLINKS (REQUIRED):
+    - Always use \usepackage[hidelinks]{hyperref} or with colored links
+    - All citations, section refs, figure refs, table refs must be clickable
+    - This is essential for reader navigation
+
+════════════════════════════════════════════════════════════════════════════════
+                          WORKFLOW: REVIEW AND REFLECT
+════════════════════════════════════════════════════════════════════════════════
+
+Before calling finish, you MUST complete these review steps:
+
+1. REVIEW RESOURCES (at the start):
+   - Read .gemini/skills/paper-writer/SKILL.md for detailed guidance
+   - Study templates/paper_writing/lab_style_guide.md for style conventions
+   - Browse paper_examples/ for formatting and language patterns
+
+2. SELF-REFLECTION (before finishing):
+   After writing all sections, review your work against these criteria:
+
+   LANGUAGE CHECK:
+   - [ ] Is the writing clear and jargon-free?
+   - [ ] Are claims specific with quantitative support?
+   - [ ] Is active voice used throughout?
+
+   FORMATTING CHECK:
+   - [ ] Does main.tex include \input{commands/math}, \input{commands/general}, \input{commands/macros}?
+   - [ ] Is hyperref package included for clickable references?
+   - [ ] Do tables use booktabs (no vertical lines)?
+   - [ ] Are best results bolded in tables?
+   - [ ] Are figures/tables properly captioned?
+
+   STRUCTURE CHECK:
+   - [ ] Does introduction follow: hook → importance → gap → approach → preview → contributions?
+   - [ ] Are contribution bullets specific with action verbs?
+   - [ ] Does the paper compile without errors?
+
+3. FIX ISSUES:
+   - Address any issues found in the self-reflection
+   - Re-compile and verify the PDF looks correct
+
+Only after completing this review should you consider the paper finished.

@@ -1,0 +1,34 @@
+{
+  "created_at": "2026-06-15T21:53:26.471201",
+  "stages": {
+    "resource_finder": {
+      "status": "completed",
+      "started_at": "2026-06-15T21:53:26.471595",
+      "completed_at": "2026-06-15T22:15:58.408144",
+      "success": true,
+      "outputs": {
+        "literature_review": "/workspaces/llm-sleep-mechanism-95e3-gemini/literature_review.md",
+        "resources_catalog": "/workspaces/llm-sleep-mechanism-95e3-gemini/resources.md",
+        "papers_dir": "/workspaces/llm-sleep-mechanism-95e3-gemini/papers",
+        "datasets_dir": "/workspaces/llm-sleep-mechanism-95e3-gemini/datasets",
+        "code_dir": "/workspaces/llm-sleep-mechanism-95e3-gemini/code"
+      }
+    },
+    "experiment_runner": {
+      "status": "completed",
+      "started_at": "2026-06-15T22:15:58.408423",
+      "completed_at": "2026-06-15T23:25:36.432298",
+      "success": true,
+      "outputs": {
+        "success": true,
+        "return_code": 0,
+        "elapsed_time": 4178.013223648071,
+        "log_file": "/workspaces/llm-sleep-mechanism-95e3-gemini/logs/execution_gemini.log",
+        "transcript_file": "/workspaces/llm-sleep-mechanism-95e3-gemini/logs/execution_gemini_transcript.jsonl"
+      }
+    }
+  },
+  "current_stage": null,
+  "completed": true,
+  "completed_at": "2026-06-15T23:25:36.433056"
+}

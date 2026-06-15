@@ -1,0 +1,4 @@
+# Exclude all data files
+*
+!.gitignore
+!README.md

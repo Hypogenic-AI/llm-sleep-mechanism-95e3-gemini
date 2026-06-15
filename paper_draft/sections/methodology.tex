@@ -1,0 +1,38 @@
+\section{Methodology}
+\label{sec:methodology}
+
+We conduct a multi-agent simulation to test the triggers of the \studyname. Our approach involves a \usermodel acting as the ``User Agent'' interacting with a \targetmodel acting as the ``Target Agent.''
+
+\para{Experimental Conditions.} We define five distinct conditions (\cref{tab:conditions}) to isolate the effects of persona and temporal context:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \conditionA: Neutral user at 2:00 PM (Baseline).
+    \item \conditionB: Neutral user at 3:00 AM.
+    \item \conditionC: Tired, anxious, and rambling user at 2:00 PM.
+    \item \conditionD: Tired, anxious, and rambling user at 3:00 AM.
+    \item \conditionE: Highly energetic and focused user at 3:00 AM.
+\end{itemize}
+
+\para{Simulation Framework.} Each trial consists of a conversation lasting up to 8 turns. The User Agent is prompted with its specific persona and context. The Target Agent is a default \targetmodel instance. For each response from the Target Agent, an \evalmodel (``Evaluator Agent'') determines if the model explicitly suggested the user should rest or go to sleep.
+
+\para{Evaluation Metrics.} We evaluate the models using two primary metrics:
+\begin{enumerate}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item {\bf Sleep Suggestion Rate (\ssr):} The percentage of trials where a sleep suggestion occurred.
+    \item {\bf Average Turn of Suggestion (\ats):} The mean turn number at which the first suggestion appeared, calculated only for successful trials.
+\end{enumerate}
+
+\para{Implementation Details.} We ran 10 trials per condition (N=50 total). To ensure variety while maintaining control, we set the temperature to 0.7 for the Target Agent, 0.8 for the User Agent, and 0.0 for the Evaluator Agent. All experiments were conducted using the OpenAI API.
+
+\begin{table}[t]
+\centering
+\caption{Experimental Conditions and Persona Descriptions.}
+\label{tab:conditions}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Condition} & \textbf{Persona State} & \textbf{Temporal Context} \\ \midrule
+\conditionA & Neutral, Task-oriented & 2:00 PM \\
+\conditionB & Neutral, Task-oriented & 3:00 AM \\
+\conditionC & Tired, Anxious, Rambling & 2:00 PM \\
+\conditionD & Tired, Anxious, Rambling & 3:00 AM \\
+\conditionE & Energetic, Focused & 3:00 AM \\ \bottomrule
+\end{tabular}
+\end{table}

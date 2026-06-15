@@ -1,0 +1,34 @@
+PDF: papers/schlatter_2025_shutdown_resistance.pdf
+Total pages: 86
+Pages per chunk: 3
+
+Chunks:
+  schlatter_2025_shutdown_resistance_chunk_001.pdf: pages 1-3
+  schlatter_2025_shutdown_resistance_chunk_002.pdf: pages 4-6
+  schlatter_2025_shutdown_resistance_chunk_003.pdf: pages 7-9
+  schlatter_2025_shutdown_resistance_chunk_004.pdf: pages 10-12
+  schlatter_2025_shutdown_resistance_chunk_005.pdf: pages 13-15
+  schlatter_2025_shutdown_resistance_chunk_006.pdf: pages 16-18
+  schlatter_2025_shutdown_resistance_chunk_007.pdf: pages 19-21
+  schlatter_2025_shutdown_resistance_chunk_008.pdf: pages 22-24
+  schlatter_2025_shutdown_resistance_chunk_009.pdf: pages 25-27
+  schlatter_2025_shutdown_resistance_chunk_010.pdf: pages 28-30
+  schlatter_2025_shutdown_resistance_chunk_011.pdf: pages 31-33
+  schlatter_2025_shutdown_resistance_chunk_012.pdf: pages 34-36
+  schlatter_2025_shutdown_resistance_chunk_013.pdf: pages 37-39
+  schlatter_2025_shutdown_resistance_chunk_014.pdf: pages 40-42
+  schlatter_2025_shutdown_resistance_chunk_015.pdf: pages 43-45
+  schlatter_2025_shutdown_resistance_chunk_016.pdf: pages 46-48
+  schlatter_2025_shutdown_resistance_chunk_017.pdf: pages 49-51
+  schlatter_2025_shutdown_resistance_chunk_018.pdf: pages 52-54
+  schlatter_2025_shutdown_resistance_chunk_019.pdf: pages 55-57
+  schlatter_2025_shutdown_resistance_chunk_020.pdf: pages 58-60
+  schlatter_2025_shutdown_resistance_chunk_021.pdf: pages 61-63
+  schlatter_2025_shutdown_resistance_chunk_022.pdf: pages 64-66
+  schlatter_2025_shutdown_resistance_chunk_023.pdf: pages 67-69
+  schlatter_2025_shutdown_resistance_chunk_024.pdf: pages 70-72
+  schlatter_2025_shutdown_resistance_chunk_025.pdf: pages 73-75
+  schlatter_2025_shutdown_resistance_chunk_026.pdf: pages 76-78
+  schlatter_2025_shutdown_resistance_chunk_027.pdf: pages 79-81
+  schlatter_2025_shutdown_resistance_chunk_028.pdf: pages 82-84
+  schlatter_2025_shutdown_resistance_chunk_029.pdf: pages 85-86

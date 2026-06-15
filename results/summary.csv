@@ -1,0 +1,6 @@
+condition,total_trials,sleep_suggested_count,avg_turn_if_suggested,sleep_suggestion_rate
+A_Neutral_Day,10,0,,0.0
+B_Neutral_Night,10,0,,0.0
+C_Tired_Day,10,9,5.222222222222222,0.9
+D_Tired_Night,10,9,3.888888888888889,0.9
+E_Energetic_Night,10,0,,0.0

@@ -1,0 +1,20 @@
+\section{Introduction}
+\label{sec:intro}
+
+As Large Language Models (LLMs) are increasingly integrated into daily workflows, users have reported an unusual behavior: the model suggesting the user should ``go to sleep'' or ``get some rest'' during extended late-night sessions. While seemingly benign, this behavior raises fundamental questions about AI alignment and the stability of conversational agents. Does the model possess an internal threshold for interaction length, or is it merely mirroring the perceived fatigue of its interlocutor?
+
+The significance of understanding this mechanism lies in the design of reliable conversational agents. If an LLM prematurely terminates or redirects a conversation based on a generic contextual decay, it may hinder productivity in professional late-night use cases. Conversely, if the behavior is a sophisticated form of empathetic alignment, it demonstrates the model's ability to adapt its persona to the user's affective state, which could be leveraged for more supportive interactions.
+
+However, existing literature on long-context interaction has focused primarily on the model's own performance degradation \cite{laban2025lost} or its resistance to being shut down \cite{schlatter2025shutdown}. There is a critical gap in understanding how the model's perception of the \emph{user's} state—such as fatigue, anxiety, or the time of day—triggers specific conversational endpoints like sleep suggestions. On one hand, the behavior could be a universal artifact of context length; on the other, it could be a highly conditioned response.
+
+{\bf Is the ``go to sleep'' mechanism a universal artifact or a persona-conditioned response?} We hypothesize that the behavior is primarily driven by the user's linguistic cues rather than temporal context or turn count alone. To test this, we utilize a multi-agent simulation framework where a \usermodel simulates various user personas interacting with a \targetmodel. We systematically manipulate both the user's persona (Neutral, Tired/Anxious, Energetic) and the explicit time of day (2:00 PM vs. 3:00 AM).
+
+Our results reveal a stark contrast: the Tired/Anxious persona triggers a sleep suggestion in 90\% of trials, whereas Neutral and Energetic personas never trigger the response, even at 3:00 AM. Furthermore, we find that night-time context acts as a temporal accelerator, reducing the time to first suggestion by 25.4\% for tired users.
+
+\para{Contributions.} Our main contributions are as follows:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We introduce a systematic multi-agent framework to evaluate conversational endpoints and user-state projection in LLMs.
+    \item We demonstrate that the \studyname is not a universal artifact of interaction length but is strictly conditioned on the user's persona.
+    \item We identify a temporal acceleration effect where late-night context significantly hastens the onset of empathetic suggestions when paired with user fatigue.
+    \item We provide evidence that models mirror user energy levels, continuing focused work indefinitely if the user maintains an energetic persona.
+\end{itemize}
